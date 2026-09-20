@@ -3,35 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Automated Legal Notice Generator (Sec 138 NI Act)</title>
+  <title>Statutory Legal Notice Drafter - Advanced</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f6f9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f1f5f9;
       margin: 0;
-      padding: 20px;
-      color: #333;
+      padding: 15px;
+      color: #1e293b;
     }
     .container {
-      max-width: 900px;
+      max-width: 950px;
       margin: 0 auto;
       background: #ffffff;
-      padding: 25px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 24px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
     }
     h2 {
-      margin-top: 0;
-      color: #1a202c;
-      border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 10px;
+      margin: 0 0 8px 0;
+      color: #0f172a;
+    }
+    p.subtitle {
+      margin: 0 0 20px 0;
+      color: #64748b;
+      font-size: 14px;
+    }
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 20px 0 10px 0;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #0369a1;
     }
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 15px;
+      gap: 12px;
     }
-    @media (max-width: 600px) {
+    @media (max-width: 650px) {
       .grid { grid-template-columns: 1fr; }
     }
     .form-group {
@@ -39,133 +50,212 @@
       flex-direction: column;
     }
     label {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
+      color: #334155;
     }
     input, textarea {
-      padding: 10px;
+      padding: 9px;
       border: 1px solid #cbd5e1;
-      border-radius: 4px;
+      border-radius: 6px;
       font-size: 14px;
     }
-    button {
-      background-color: #1e293b;
-      color: #ffffff;
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #0284c7;
+    }
+    .dynamic-item {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    .dynamic-item textarea {
+      flex: 1;
+      height: 48px;
+      font-family: inherit;
+    }
+    .btn-remove {
+      background: #ef4444;
+      color: white;
       border: none;
-      padding: 12px 20px;
-      font-size: 15px;
-      font-weight: bold;
-      border-radius: 4px;
+      border-radius: 6px;
+      padding: 8px 12px;
       cursor: pointer;
-      margin-top: 15px;
+      font-weight: bold;
+    }
+    .btn-add {
+      background: #0284c7;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 9px 15px;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .btn-submit {
+      background: #0f172a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
       width: 100%;
-    }
-    button:hover {
-      background-color: #0f172a;
-    }
-    .output-box {
       margin-top: 25px;
+    }
+    .btn-submit:hover {
+      background: #1e293b;
+    }
+    .output-section {
+      margin-top: 30px;
       display: none;
     }
-    textarea#noticeOutput {
+    #noticeOutput {
       width: 100%;
-      height: 350px;
+      height: 420px;
       font-family: "Courier New", Courier, monospace;
       font-size: 13px;
-      white-space: pre-wrap;
       line-height: 1.5;
       background: #f8fafc;
+      padding: 12px;
+      border-radius: 6px;
       box-sizing: border-box;
     }
-    .btn-action {
-      background-color: #0284c7;
-      margin-top: 8px;
-      width: auto;
-      margin-right: 10px;
+    .btn-group {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
     }
-    .btn-action:hover {
-      background-color: #0369a1;
+    .btn-action {
+      background: #0284c7;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>Statutory Legal Notice Drafter (NI Act, Sec. 138)</h2>
+  <h2>Automated Statutory Legal Notice Drafter</h2>
+  <p class="subtitle">Under Section 138 of the Negotiable Instruments Act, 1881</p>
 
-  <form id="legalForm">
+  <form id="drafterForm">
+    <div class="section-title">1. Complainant & Accused Parties</div>
     <div class="grid">
       <div class="form-group">
-        <label>Complainant / Payee Name:</label>
-        <input type="text" id="payeeName" placeholder="e.g., Ramesh Kumar" required>
+        <label>Complainant / Client Name:</label>
+        <input type="text" id="payeeName" placeholder="e.g., M/s Apex Tradings" required>
       </div>
-
       <div class="form-group">
         <label>Accused / Drawer Name:</label>
-        <input type="text" id="drawerName" placeholder="e.g., ABC Enterprises Pvt. Ltd." required>
+        <input type="text" id="drawerName" placeholder="e.g., John Doe / ABC Pvt. Ltd." required>
       </div>
+      <div class="form-group" style="grid-column: 1 / -1;">
+        <label>Accused Full Postal Address:</label>
+        <textarea id="drawerAddress" rows="2" placeholder="Complete postal address for Registered AD / Speed Post" required></textarea>
+      </div>
+    </div>
 
+    <div class="section-title">2. Case Background & Facts (Optional)</div>
+    <div class="form-group">
+      <label>Brief background of transaction / liability:</label>
+      <textarea id="caseBackground" rows="3" placeholder="e.g., That my Client supplied goods / rendered consulting services against Invoices..."></textarea>
+    </div>
+
+    <div class="section-title">3. Cheque & Dishonour Specifics</div>
+    <div class="grid">
       <div class="form-group">
-        <label>Drawer Address:</label>
-        <input type="text" id="drawerAddress" placeholder="Full postal address" required>
+        <label>Cheque Number(s):</label>
+        <input type="text" id="chequeNo" placeholder="e.g., 045123, 045124" required>
       </div>
-
       <div class="form-group">
-        <label>Cheque Number:</label>
-        <input type="text" id="chequeNo" placeholder="e.g., 045123" required>
+        <label>Total Cheque Amount (INR):</label>
+        <input type="text" id="chequeAmount" placeholder="e.g., Rs. 5,00,000/-" required>
       </div>
-
-      <div class="form-group">
-        <label>Cheque Amount (in INR):</label>
-        <input type="text" id="chequeAmount" placeholder="e.g., 2,50,000/-" required>
-      </div>
-
       <div class="form-group">
         <label>Cheque Date:</label>
         <input type="date" id="chequeDate" required>
       </div>
-
       <div class="form-group">
-        <label>Drawee Bank Name:</label>
-        <input type="text" id="bankName" placeholder="e.g., State Bank of India" required>
+        <label>Drawee Bank & Branch:</label>
+        <input type="text" id="bankName" placeholder="e.g., HDFC Bank, Connaught Place" required>
       </div>
-
       <div class="form-group">
         <label>Return Memo Date:</label>
         <input type="date" id="memoDate" required>
       </div>
-
       <div class="form-group">
         <label>Reason for Dishonour:</label>
         <input type="text" id="returnReason" value="Funds Insufficient" required>
       </div>
+    </div>
 
+    <div class="section-title">4. Additional Custom Points / Claims (Dynamic)</div>
+    <div id="customPointsContainer"></div>
+    <button type="button" class="btn-add" onclick="addCustomPoint()">+ Add Custom Point / Claim</button>
+
+    <div class="section-title">5. Advocate Details</div>
+    <div class="grid">
       <div class="form-group">
-        <label>Advocate / Sender Name:</label>
+        <label>Advocate Name:</label>
         <input type="text" id="advocateName" placeholder="Advocate Name" required>
+      </div>
+      <div class="form-group">
+        <label>Chamber / Office Address:</label>
+        <input type="text" id="officeAddress" placeholder="e.g., Chamber No. ..., Tis Hazari / High Court">
       </div>
     </div>
 
-    <button type="submit">Generate Legal Notice</button>
+    <button type="submit" class="btn-submit">Generate Complete Legal Notice</button>
   </form>
 
-  <div class="output-box" id="outputSection">
-    <h3>Generated Statutory Notice Draft</h3>
+  <div class="output-section" id="outputSection">
+    <div class="section-title">Generated Legal Notice</div>
     <textarea id="noticeOutput" readonly></textarea>
-    <button type="button" class="btn-action" onclick="copyDraft()">Copy to Clipboard</button>
-    <button type="button" class="btn-action" onclick="downloadDraft()">Download .txt File</button>
+    <div class="btn-group">
+      <button type="button" class="btn-action" onclick="copyNotice()">Copy to Clipboard</button>
+      <button type="button" class="btn-action" onclick="downloadNotice()">Download as Text (.txt)</button>
+    </div>
   </div>
 </div>
 
 <script>
-  document.getElementById('legalForm').addEventListener('submit', function(e) {
+  let pointCounter = 0;
+
+  function addCustomPoint() {
+    pointCounter++;
+    const container = document.getElementById('customPointsContainer');
+    const div = document.createElement('div');
+    div.className = 'dynamic-item';
+    div.id = 'point_row_' + pointCounter;
+    div.innerHTML = `
+      <textarea class="custom-point-input" placeholder="Type custom allegation/fact/demand point here..."></textarea>
+      <button type="button" class="btn-remove" onclick="removePoint(${pointCounter})">✕</button>
+    `;
+    container.appendChild(div);
+  }
+
+  function removePoint(id) {
+    const row = document.getElementById('point_row_' + id);
+    if (row) row.remove();
+  }
+
+  document.getElementById('drafterForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    // 1. Gather all inputs from the form fields
     const payee = document.getElementById('payeeName').value.trim();
     const drawer = document.getElementById('drawerName').value.trim();
     const address = document.getElementById('drawerAddress').value.trim();
+    const background = document.getElementById('caseBackground').value.trim();
     const chqNo = document.getElementById('chequeNo').value.trim();
     const amount = document.getElementById('chequeAmount').value.trim();
     const chqDate = document.getElementById('chequeDate').value;
@@ -173,12 +263,45 @@
     const memoDate = document.getElementById('memoDate').value;
     const reason = document.getElementById('returnReason').value.trim();
     const advocate = document.getElementById('advocateName').value.trim();
+    const office = document.getElementById('officeAddress').value.trim();
     const today = new Date().toLocaleDateString('en-GB');
 
-    // 2. Draft template (mirrors standard Python f-string substitution)
-    const noticeText = 
-`REGISTERED A.D. / SPEED POST
-LEGAL NOTICE UNDER SECTION 138 OF THE NEGOTIABLE INSTRUMENTS ACT, 1881
+    let paraNum = 1;
+    let paragraphs = [];
+
+    // Background paragraph if provided
+    if (background) {
+      paragraphs.push(`${paraNum}. That ${background}`);
+      paraNum++;
+    }
+
+    // Statutory issue paragraph
+    paragraphs.push(`${paraNum}. That in discharge of your legally enforceable debt and liability toward my Client, you issued Cheque bearing No(s). ${chqNo} dated ${chqDate}, drawn on ${bank}, for an aggregate sum of ${amount}.`);
+    paraNum++;
+
+    // Dishonour paragraph
+    paragraphs.push(`${paraNum}. That my Client presented the said Cheque for encashment through their bankers in accordance with the law. However, to the utmost shock and dismay of my Client, the said Cheque was returned dishonoured and unpaid vide Cheque Return Memo dated ${memoDate} with the endorsement/reason: "${reason}".`);
+    paraNum++;
+
+    // Add any dynamic custom points user added
+    const customInputs = document.querySelectorAll('.custom-point-input');
+    customInputs.forEach(input => {
+      const text = input.value.trim();
+      if (text) {
+        paragraphs.push(`${paraNum}. That ${text}`);
+        paraNum++;
+      }
+    });
+
+    // Statutory 15-day demand & penalty warning
+    paragraphs.push(`${paraNum}. That by virtue of this Statutory Notice, you are hereby called upon to make the payment of the said amount of ${amount} to my Client within a period of 15 (fifteen) days from the date of receipt of this notice.`);
+    paraNum++;
+
+    paragraphs.push(`${paraNum}. Please take note that if you fail to comply with the statutory requisition within the prescribed period of 15 days, my Client shall be constrained to institute criminal proceedings against you under Section 138 of the Negotiable Instruments Act, 1881, before the competent Court of Law, holding you liable for all punitive damages, statutory costs, and consequences arising thereunder.`);
+
+    const noticeFullText = 
+`REGISTERED A.D. / SPEED POST / E-MAIL
+STATUTORY LEGAL NOTICE UNDER SECTION 138 OF THE NEGOTIABLE INSTRUMENTS ACT, 1881
 
 Date: ${today}
 
@@ -190,42 +313,32 @@ Sir/Madam,
 
 Under instructions from and on behalf of my client, ${payee} (hereinafter referred to as "my Client"), I do hereby serve upon you this Statutory Legal Notice under Section 138 of the Negotiable Instruments Act, 1881:
 
-1. That in discharge of your legally enforceable debt and liability toward my Client, you issued a Cheque bearing No. ${chqNo}, dated ${chqDate}, drawn on ${bank}, for an amount of Rs. ${amount}.
-
-2. That my Client presented the said Cheque for encashment through their bankers. However, the said Cheque was returned dishonoured and unpaid vide Cheque Return Memo dated ${memoDate} with the remarks "${reason}".
-
-3. That you have failed to maintain sufficient funds in your bank account to honour the commitment made by you toward the legally enforceable liability due to my Client.
-
-4. That by virtue of this Statutory Notice, you are hereby called upon to pay the outstanding amount of Rs. ${amount} to my Client within 15 (fifteen) days from the date of receipt of this notice.
-
-5. In the event of your failure to make the said payment within the statutory period of 15 days, my Client shall be constrained to initiate criminal proceedings against you under Section 138 of the Negotiable Instruments Act, 1881, before the competent Court of Metropolitan Magistrate / Judicial Magistrate, holding you liable for all legal consequences, penalties, and costs arising thereunder.
+${paragraphs.join('\n\n')}
 
 Yours faithfully,
 
 ${advocate}
-Advocate`;
+Advocate
+${office ? office : ''}`;
 
-    // 3. Render into the output area
-    document.getElementById('noticeOutput').value = noticeText;
+    document.getElementById('noticeOutput').value = noticeFullText;
     document.getElementById('outputSection').style.display = 'block';
     document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
   });
 
-  // Function to copy generated text
-  function copyDraft() {
-    const output = document.getElementById('noticeOutput');
-    output.select();
-    navigator.clipboard.writeText(output.value);
+  function copyNotice() {
+    const text = document.getElementById('noticeOutput');
+    text.select();
+    navigator.clipboard.writeText(text.value);
     alert('Notice copied to clipboard!');
   }
 
-  // Function to download the draft as a .txt document
-  function downloadDraft() {
+  function downloadNotice() {
     const text = document.getElementById('noticeOutput').value;
     const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = 'Statutory_Notice_138_NI_Act.txt';
+    link.download = 'Statutory_Notice_Sec138.txt';
     link.click();
     URL.revokeObjectURL(link.href);
   }
@@ -233,4 +346,3 @@ Advocate`;
 
 </body>
 </html>
-
