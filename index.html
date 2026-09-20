@@ -1,1 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automated Legal Notice Generator (Sec 138 NI Act)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    h2 {
+      margin-top: 0;
+      color: #1a202c;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 10px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    input, textarea {
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    button {
+      background-color: #1e293b;
+      color: #ffffff;
+      border: none;
+      padding: 12px 20px;
+      font-size: 15px;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 15px;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #0f172a;
+    }
+    .output-box {
+      margin-top: 25px;
+      display: none;
+    }
+    textarea#noticeOutput {
+      width: 100%;
+      height: 350px;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 13px;
+      white-space: pre-wrap;
+      line-height: 1.5;
+      background: #f8fafc;
+      box-sizing: border-box;
+    }
+    .btn-action {
+      background-color: #0284c7;
+      margin-top: 8px;
+      width: auto;
+      margin-right: 10px;
+    }
+    .btn-action:hover {
+      background-color: #0369a1;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Statutory Legal Notice Drafter (NI Act, Sec. 138)</h2>
+
+  <form id="legalForm">
+    <div class="grid">
+      <div class="form-group">
+        <label>Complainant / Payee Name:</label>
+        <input type="text" id="payeeName" placeholder="e.g., Ramesh Kumar" required>
+      </div>
+
+      <div class="form-group">
+        <label>Accused / Drawer Name:</label>
+        <input type="text" id="drawerName" placeholder="e.g., ABC Enterprises Pvt. Ltd." required>
+      </div>
+
+      <div class="form-group">
+        <label>Drawer Address:</label>
+        <input type="text" id="drawerAddress" placeholder="Full postal address" required>
+      </div>
+
+      <div class="form-group">
+        <label>Cheque Number:</label>
+        <input type="text" id="chequeNo" placeholder="e.g., 045123" required>
+      </div>
+
+      <div class="form-group">
+        <label>Cheque Amount (in INR):</label>
+        <input type="text" id="chequeAmount" placeholder="e.g., 2,50,000/-" required>
+      </div>
+
+      <div class="form-group">
+        <label>Cheque Date:</label>
+        <input type="date" id="chequeDate" required>
+      </div>
+
+      <div class="form-group">
+        <label>Drawee Bank Name:</label>
+        <input type="text" id="bankName" placeholder="e.g., State Bank of India" required>
+      </div>
+
+      <div class="form-group">
+        <label>Return Memo Date:</label>
+        <input type="date" id="memoDate" required>
+      </div>
+
+      <div class="form-group">
+        <label>Reason for Dishonour:</label>
+        <input type="text" id="returnReason" value="Funds Insufficient" required>
+      </div>
+
+      <div class="form-group">
+        <label>Advocate / Sender Name:</label>
+        <input type="text" id="advocateName" placeholder="Advocate Name" required>
+      </div>
+    </div>
+
+    <button type="submit">Generate Legal Notice</button>
+  </form>
+
+  <div class="output-box" id="outputSection">
+    <h3>Generated Statutory Notice Draft</h3>
+    <textarea id="noticeOutput" readonly></textarea>
+    <button type="button" class="btn-action" onclick="copyDraft()">Copy to Clipboard</button>
+    <button type="button" class="btn-action" onclick="downloadDraft()">Download .txt File</button>
+  </div>
+</div>
+
+<script>
+  document.getElementById('legalForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // 1. Gather all inputs from the form fields
+    const payee = document.getElementById('payeeName').value.trim();
+    const drawer = document.getElementById('drawerName').value.trim();
+    const address = document.getElementById('drawerAddress').value.trim();
+    const chqNo = document.getElementById('chequeNo').value.trim();
+    const amount = document.getElementById('chequeAmount').value.trim();
+    const chqDate = document.getElementById('chequeDate').value;
+    const bank = document.getElementById('bankName').value.trim();
+    const memoDate = document.getElementById('memoDate').value;
+    const reason = document.getElementById('returnReason').value.trim();
+    const advocate = document.getElementById('advocateName').value.trim();
+    const today = new Date().toLocaleDateString('en-GB');
+
+    // 2. Draft template (mirrors standard Python f-string substitution)
+    const noticeText = 
+`REGISTERED A.D. / SPEED POST
+LEGAL NOTICE UNDER SECTION 138 OF THE NEGOTIABLE INSTRUMENTS ACT, 1881
+
+Date: ${today}
+
+TO,
+${drawer}
+${address}
+
+Sir/Madam,
+
+Under instructions from and on behalf of my client, ${payee} (hereinafter referred to as "my Client"), I do hereby serve upon you this Statutory Legal Notice under Section 138 of the Negotiable Instruments Act, 1881:
+
+1. That in discharge of your legally enforceable debt and liability toward my Client, you issued a Cheque bearing No. ${chqNo}, dated ${chqDate}, drawn on ${bank}, for an amount of Rs. ${amount}.
+
+2. That my Client presented the said Cheque for encashment through their bankers. However, the said Cheque was returned dishonoured and unpaid vide Cheque Return Memo dated ${memoDate} with the remarks "${reason}".
+
+3. That you have failed to maintain sufficient funds in your bank account to honour the commitment made by you toward the legally enforceable liability due to my Client.
+
+4. That by virtue of this Statutory Notice, you are hereby called upon to pay the outstanding amount of Rs. ${amount} to my Client within 15 (fifteen) days from the date of receipt of this notice.
+
+5. In the event of your failure to make the said payment within the statutory period of 15 days, my Client shall be constrained to initiate criminal proceedings against you under Section 138 of the Negotiable Instruments Act, 1881, before the competent Court of Metropolitan Magistrate / Judicial Magistrate, holding you liable for all legal consequences, penalties, and costs arising thereunder.
+
+Yours faithfully,
+
+${advocate}
+Advocate`;
+
+    // 3. Render into the output area
+    document.getElementById('noticeOutput').value = noticeText;
+    document.getElementById('outputSection').style.display = 'block';
+    document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // Function to copy generated text
+  function copyDraft() {
+    const output = document.getElementById('noticeOutput');
+    output.select();
+    navigator.clipboard.writeText(output.value);
+    alert('Notice copied to clipboard!');
+  }
+
+  // Function to download the draft as a .txt document
+  function downloadDraft() {
+    const text = document.getElementById('noticeOutput').value;
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'Statutory_Notice_138_NI_Act.txt';
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+</script>
+
+</body>
+</html>
 
